@@ -35,7 +35,7 @@ def app():
     n_clusters = int(st.number_input("Number of Clusters (between 2 and 6):"))
     
     if st.button('Start'):
-
+        centers = generate_random_points_in_square(-4, 4, -4, 4, n_clusters)
         X, y = make_blobs(n_samples=n_samples, n_features=2,
                         cluster_std=cluster_std, centers = centers,
                         random_state=random_state)
