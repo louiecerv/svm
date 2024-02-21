@@ -44,17 +44,11 @@ def app():
         
         st.subheader('Visualization')
 
-        #predict the class of new data
-        newdata = [[3,4], [5,6]]
-
         # Create the figure and axes object
         fig, ax = plt.subplots(figsize=(9, 9))
 
         # Scatter plot of the data
         ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
-
-        # Predict the class of new data
-        st.text(f'predicted classes: {clfSVM.predict(newdata)}')
 
         # Plot the decision function directly on ax
         xlim = ax.get_xlim()
