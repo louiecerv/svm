@@ -54,7 +54,7 @@ def app():
         ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
 
         # Predict the class of new data
-        print(f'predicted classes: {clfSVM.predict(newdata)}')
+        st.text(f'predicted classes: {clfSVM.predict(newdata)}')
 
         # Plot the decision function directly on ax
         xlim = ax.get_xlim()
@@ -73,9 +73,6 @@ def app():
 
         st.pyplot(fig)
 
-def predict_category(clf, s):
-    pred = clf.predict([s])
-    return str(pred[0])
 
 if __name__ == "__main__":
     app()
