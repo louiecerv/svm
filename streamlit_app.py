@@ -70,8 +70,16 @@ def app():
             fig, ax = plt.subplots(figsize=(9, 9))
     
             # Scatter plot of the data
-            ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
-            
+            #ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
+            sns.scatterplot(
+                x = "X",
+                y = "Y",
+                hue = "Class",
+                data = df,
+                palette="Set1",
+                ax=ax  # Specify the axes object
+            )          
+
             # Plot the decision function directly on ax
             xlim = ax.get_xlim()
             ylim = ax.get_ylim()
