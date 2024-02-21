@@ -5,8 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn import svm
+from sklearn.datasets import make_blobs
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
@@ -14,7 +14,7 @@ from sklearn.metrics import classification_report
 # Define the Streamlit app
 def app():
     # Display the DataFrame with formatting
-    st.title("Spam Detection using the Naive Bayes Classifier")
+    st.title("Support Vector Machine Classifier")
     text = """Louie F. Cervantes, M.Eng. \n\n
     CCS 229 - Intelligent Systems
     Computer Science Department
@@ -24,68 +24,50 @@ def app():
 
     st.subheader('Description')
 
-    text = """The SMS Spam Collection Dataset from Kaggle, often used 
-        to demonstrate Naive Bayes as a spam detector, is a valuable 
-        resource for machine learning enthusiasts and researchers 
-        interested in text classification, particularly spam 
-        filtering. Here's a breakdown of its key characteristics:"""
-    st.write(text)
-    st.write('Data:')
-    st.write('Size: 5,572 SMS messages in English')
-    st.write("""Format: Plain text, with each line containing two columns: 
-            label ("ham" for legitimate, "spam" for spam) and message content.
-            Content: The messages originate from various sources, 
-            including Singaporean students and general English speakers. 
-            They cover a diverse range of topics and communication styles.""")
+    text = """
+        Replace with description of SVM. """)
 
-    data = pd.read_csv('spam.csv', 
-                        dtype='str', header=0, 
-                        sep = ",", encoding='latin')        
-
-    # display the dataset
-    st.header('The Dataset')
-    
-    st.dataframe(data, use_container_width=True)  
-    X = data['v2']
-    y = data['v1']        
-    
-    # Create a new figure and axes object
-    fig, ax = plt.subplots()
-
-    # Create a horizontal barplot using seaborn
-    sns.countplot(y='v1', data=data, hue='v1', palette='bright', ax=ax)
-
-    # Set title
-    ax.set_title('Plot of Spam/Ham Distribution')
-    st.pyplot(fig)
-
-    clfNB = make_pipeline(TfidfVectorizer(), MultinomialNB())
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=5)
-    clfNB.fit(X_train, y_train)
-    
-    y_test_pred = clfNB.predict(X_test)
     if st.button('Start'):
-        
+        X, y = make_blobs(n_samples=200, centers=2, center_box=(-10, 10), cluster_std=1.0, random_state=42)     
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=3)
+
+        clfSVM = svm.SVC(kernel='linear', C=1000)
+        clfSVM.fit(X_train, y_train)
+        y_test_pred = clfSVM.predict(X_test)
+
         st.subheader('Performance Metrics')
         st.text(classification_report(y_test, y_test_pred))
 
         st.subheader('Confusion Matrix')
-        cmNB = confusion_matrix(y_test, y_test_pred)
-        st.write(cmNB)
+        cm = confusion_matrix(y_test, y_test_pred)
+        st.write(cm)
+        
+        st.subheader('Visualization')
+        # Create the figure and axes object
+        fig, ax = plt.subplots(figsize=(9, 9))
 
-        st.subheader('Sample predictions')
-        text = 'receive a free entry'
-        st.text(text + ' ---> ' + predict_category(clfNB, text))
-        text = 'you could win a prize'
-        st.text(text + ' ---> ' + predict_category(clfNB, text))
-        text = 'We will have a meeting'
-        st.text(text + ' ---> ' + predict_category(clfNB, text))
-        text = 'camera for free'
-        st.text(text + ' ---> ' + predict_category(clfNB, text))
+        # Scatter plot of the data
+        ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
 
-    strinput = st.text_input("Enter message:")
-    if st.button('Submit'):
-        st.write('The message is : ' + predict_category(clfNB, strinput))
+        # Predict the class of new data
+        print(f'predicted classes: {clfSVM.predict(newdata)}')
+
+        # Plot the decision function directly on ax
+        xlim = ax.get_xlim()
+        ylim = ax.get_ylim()
+
+        xx = np.linspace(xlim[0], xlim[1], 30)
+        yy = np.linspace(ylim[0], ylim[1], 30)
+        YY, XX = np.meshgrid(yy, xx)
+        xy = np.vstack([XX.ravel(), YY.ravel()]).T
+        Z = clfSVM.decision_function(xy).reshape(XX.shape)
+
+        ax.contour(XX, YY, Z, colors='k', levels=[-1, 0, 1], alpha=0.5, linestyles=['--', '--', '--'])
+
+        # Plot support vectors
+        ax.scatter(clfSVM.support_vectors_[:, 0], clfSVM.support_vectors_[:, 1], s=100, linewidth=1, facecolor='none')
+
+        st.pyplot(fig)
 
 def predict_category(clf, s):
     pred = clf.predict([s])
