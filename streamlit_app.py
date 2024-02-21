@@ -55,12 +55,30 @@ def app():
         if n_clusters == 2:
             st.subheader('Visualization')
     
+            #use the Numpy array to merge the data and test columns
+            dataset = np.column_stack((X, y))
+
+            df = pd.DataFrame(dataset)
+            # Add column names to the DataFrame
+            df = df.rename(columns={0: 'X', 1: 'Y', 2: 'Class'})
+            # Extract data and classes
+            x = df['X']
+            y = df['Y']
+            classes = df['Class'].unique()
+
             # Create the figure and axes object
             fig, ax = plt.subplots(figsize=(9, 9))
     
             # Scatter plot of the data
             #ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
-            ax.scatter(X[:, 0], X[:, 1], hue=y, s=30, cmap="Set3")
+            sns.scatterplot(
+                x = "X",
+                y = "Y",
+                hue = "Class",
+                data = df,
+                palette="Set1",
+                ax=ax  # Specify the axes object
+            )
     
             xx = np.linspace(xlim[0], xlim[1], 30)
             yy = np.linspace(ylim[0], ylim[1], 30)
