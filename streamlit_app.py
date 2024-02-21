@@ -25,7 +25,7 @@ def app():
     st.subheader('Description')
 
     text = """
-        Replace with description of SVM. """
+        Replace this with description of SVM. """
     st.write(text)
 
     # Get user's inputs
