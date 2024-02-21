@@ -27,9 +27,20 @@ def app():
     text = """
         Replace with description of SVM. """
     st.write(text)
+
+    # Get user's inputs
+    n_samples = int(st.number_input("Enter the number of samples:"))
+    cluster_std = st.number_input("Standard deviation (between 0 and 1):")
+    random_state = int(st.number_input("Random seed (between 0 and 100):"))
+    n_clusters = int(st.number_input("Number of Clusters (between 2 and 6):"))
+    
     if st.button('Start'):
-        X, y = make_blobs(n_samples=200, centers=2, center_box=(-5, 5), cluster_std=0.7, random_state=42)     
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=3)
+
+        X, y = make_blobs(n_samples=n_samples, n_features=2,
+                        cluster_std=cluster_std, centers = centers,
+                        random_state=random_state)
+                   
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         clfSVM = svm.SVC(kernel='linear', C=1000)
         clfSVM.fit(X_train, y_train)
@@ -67,6 +78,25 @@ def app():
 
         st.pyplot(fig)
 
+def generate_random_points_in_square(x_min, x_max, y_min, y_max, num_points):
+    """
+    Generates a NumPy array of random points within a specified square region.
+
+    Args:
+        x_min (float): Minimum x-coordinate of the square.
+        x_max (float): Maximum x-coordinate of the square.
+        y_min (float): Minimum y-coordinate of the square.
+        y_max (float): Maximum y-coordinate of the square.
+        num_points (int): Number of points to generate.
+
+    Returns:
+        numpy.ndarray: A 2D NumPy array of shape (num_points, 2) containing the generated points.
+    """
+
+    # Generate random points within the defined square region
+    points = np.random.uniform(low=[x_min, y_min], high=[x_max, y_max], size=(num_points, 2))
+
+    return points
 
 if __name__ == "__main__":
     app()
