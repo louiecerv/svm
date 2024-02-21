@@ -60,7 +60,7 @@ def app():
     
             # Scatter plot of the data
             #ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
-            ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap="Set1")
+            ax.scatter(X[:, 0], X[:, 1], hue=y, s=30, cmap="Set3")
     
             xx = np.linspace(xlim[0], xlim[1], 30)
             yy = np.linspace(ylim[0], ylim[1], 30)
