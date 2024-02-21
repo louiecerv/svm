@@ -43,6 +43,10 @@ def app():
         st.write(cm)
         
         st.subheader('Visualization')
+
+        #predict the class of new data
+        newdata = [[3,4], [5,6]]
+
         # Create the figure and axes object
         fig, ax = plt.subplots(figsize=(9, 9))
 
