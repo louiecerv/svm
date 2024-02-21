@@ -52,31 +52,31 @@ def app():
         st.subheader('Confusion Matrix')
         cm = confusion_matrix(y_test, y_test_pred)
         st.write(cm)
-        
-        st.subheader('Visualization')
-
-        # Create the figure and axes object
-        fig, ax = plt.subplots(figsize=(9, 9))
-
-        # Scatter plot of the data
-        ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
-
-        # Plot the decision function directly on ax
-        xlim = ax.get_xlim()
-        ylim = ax.get_ylim()
-
-        xx = np.linspace(xlim[0], xlim[1], 30)
-        yy = np.linspace(ylim[0], ylim[1], 30)
-        YY, XX = np.meshgrid(yy, xx)
-        xy = np.vstack([XX.ravel(), YY.ravel()]).T
-        Z = clfSVM.decision_function(xy).reshape(XX.shape)
-
-        ax.contour(XX, YY, Z, colors='k', levels=[-1, 0, 1], alpha=0.5, linestyles=['--', '--', '--'])
-
-        # Plot support vectors
-        ax.scatter(clfSVM.support_vectors_[:, 0], clfSVM.support_vectors_[:, 1], s=100, linewidth=1, facecolor='none')
-
-        st.pyplot(fig)
+        if n_clusters == 2:
+            st.subheader('Visualization')
+    
+            # Create the figure and axes object
+            fig, ax = plt.subplots(figsize=(9, 9))
+    
+            # Scatter plot of the data
+            ax.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired)
+    
+            # Plot the decision function directly on ax
+            xlim = ax.get_xlim()
+            ylim = ax.get_ylim()
+    
+            xx = np.linspace(xlim[0], xlim[1], 30)
+            yy = np.linspace(ylim[0], ylim[1], 30)
+            YY, XX = np.meshgrid(yy, xx)
+            xy = np.vstack([XX.ravel(), YY.ravel()]).T
+            Z = clfSVM.decision_function(xy).reshape(XX.shape)
+    
+            ax.contour(XX, YY, Z, colors='k', levels=[-1, 0, 1], alpha=0.5, linestyles=['--', '--', '--'])
+    
+            # Plot support vectors
+            ax.scatter(clfSVM.support_vectors_[:, 0], clfSVM.support_vectors_[:, 1], s=100, linewidth=1, facecolor='none')
+    
+            st.pyplot(fig)
 
 def generate_random_points_in_square(x_min, x_max, y_min, y_max, num_points):
     """
