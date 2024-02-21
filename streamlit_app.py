@@ -28,7 +28,7 @@ def app():
         Replace with description of SVM. """
     st.write(text)
     if st.button('Start'):
-        X, y = make_blobs(n_samples=200, centers=2, center_box=(-10, 10), cluster_std=1.0, random_state=42)     
+        X, y = make_blobs(n_samples=200, centers=2, center_box=(-5, 5), cluster_std=0.7, random_state=42)     
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=3)
 
         clfSVM = svm.SVC(kernel='linear', C=1000)
