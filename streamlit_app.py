@@ -93,8 +93,10 @@ def app():
             ax.contour(XX, YY, Z, colors='k', levels=[-1, 0, 1], alpha=0.5, linestyles=['--', '--', '--'])
     
             # Plot support vectors
-            ax.scatter(clfSVM.support_vectors_[:, 0], clfSVM.support_vectors_[:, 1], s=100, linewidth=1, facecolor='none')
-    
+
+            ax.scatter(clfSVM.support_vectors_[:,0], 
+                clfSVM.support_vectors_[:,1], s=100, 
+                linewidth=1, facecolor='none', edgecolor='black')
             st.pyplot(fig)
 
 def generate_random_points_in_square(x_min, x_max, y_min, y_max, num_points):
